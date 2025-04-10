@@ -295,22 +295,18 @@ fi
 
 
 # Install Maven
-MVN_VERSION=3.9.4
+MAVEN_VERSION=3.9.6
+wget -q https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz -P /tmp
+tar -xzvf /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz -C /opt
 
-wget -P /tmp/ https://archive.apache.org/dist/maven/maven-3/$MVN_VERSION/binaries/apache-maven-$MVN_VERSION-bin.tar.gz
-
-cd /opt && sudo tar -xzvf /tmp/apache-maven-$MVN_VERSION-bin.tar.gz
-
-cat > /etc/profile.d/maven.sh <<EOF
-export M2_HOME=/opt/apache-maven-$MVN_VERSION
-export PATH=\$M2_HOME/bin:\$PATH
+# Set up environment variables for Maven
+cat <<'EOF' > /etc/profile.d/maven.sh
+export M2_HOME=/opt/apache-maven-${MAVEN_VERSION}
+export PATH=$M2_HOME/bin:$PATH
 EOF
 
-cat > /root/.bashrc <<EOF
-export M2_HOME=/opt/apache-maven-$MVN_VERSION
-export PATH=\$M2_HOME/bin:\$PATH
-EOF
-
+# Load the new Maven environment immediately
+source /etc/profile.d/maven.sh
 
 ################################ User and group ###############################
 # New User $CALIMERO_SERVER_USER 
